@@ -5,15 +5,7 @@ interface Props {
 }
 
 class Employee {
-  private _name: string;
-  private _age: number;
-  private _job: string;
-
-  constructor({ name, age, job }: Props) {
-    this._name = name || "";
-    this._age = age || 0;
-    this._job = job || "";
-  }
+  constructor(private _name: string, private _age: number, private _job: string) {}
 
   printEmp() {
     console.log(`${this._name}의 나이는 ${this._age}이고 직업은 ${this._job}이다.`);
@@ -28,10 +20,6 @@ class Employee {
   }
 }
 
-let employee1 = new Employee({
-  name: "강챙",
-  age: 24,
-  job: "학생",
-});
+let employee1 = new Employee("강챙", 23, "학생");
 
 employee1.printEmp();
