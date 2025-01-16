@@ -13,9 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko'>
-      <body>
-        <div className='p-5 bg-blue-600 flex justify-center items-center'>{children}</div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

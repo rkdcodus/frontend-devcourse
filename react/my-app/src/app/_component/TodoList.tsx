@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import TodoModal from "./TodoModal";
 
 type Todo = {
   id: number;
@@ -12,6 +13,7 @@ export default function TodoList() {
   const title = "오늘 할 일";
   const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [modal, setModal] = useState(false);
 
   const handleCheckedChange = (itemId: number, check: boolean) => {
     setTodos((items) =>
@@ -19,22 +21,36 @@ export default function TodoList() {
     );
   };
 
-  const addTodo = (e) => {
+  const addTodo = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+    const lastTodo = todos.at(-1);
+    let newId = 1;
 
-    const newId = todos.length > 0 ? todos.at(-1).id + 1 : 1;
+    if (lastTodo) {
+      newId = lastTodo.id + 1;
+    }
+
     if (newTodo.trim() !== "") {
-      setTodos([...todos, { id: newId, text: newTodo, isChecked: false }]);
+      const newTodoObj = {
+        id: newId,
+        text: newTodo,
+        isChecked: false,
+      };
+      setTodos((prev) => [...prev, newTodoObj]);
       setNewTodo("");
     }
   };
 
-  const onChangeInput = (e) => {
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(e.target.value);
   };
 
   const deleteTodo = (itemId: number) => {
     setTodos(todos.filter((todo) => todo.id !== itemId));
+  };
+
+  const openModal = () => {
+    setModal(true);
   };
 
   return (
@@ -62,11 +78,18 @@ export default function TodoList() {
                 value={newTodo}
               />
               {!todo.isChecked ? <div>{todo.text}</div> : <del>{todo.text}</del>}
+
               <button
                 onClick={() => deleteTodo(todo.id)}
                 className='px-2 py-1 rounded-md text-red-500 border border-red-500 text-xs'>
                 삭제
               </button>
+              <button
+                onClick={openModal}
+                className='px-2 py-1 rounded-md text-blue-500 border border-blue-500 text-xs'>
+                상세
+              </button>
+              {modal && <TodoModal setModal={setModal} todo={todo} />}
             </li>
           );
         })}
